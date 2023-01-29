@@ -1,6 +1,5 @@
 from app import db
 from sqlalchemy import *
-from sqlalchemy.dialects.postgresql import Geometry
 from geoalchemy2 import *
 # from geoalchemy2 import Geometry, WKTElement
 
