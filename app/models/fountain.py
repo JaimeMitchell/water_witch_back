@@ -1,8 +1,8 @@
 from app import db
 from sqlalchemy import *
-from geoalchemy2 import *
+from geoalchemy2.functions import ST_AsGeoJSON, ST_Intersects
 # from geoalchemy2 import Geometry, WKTElement,  ST_Intersects
-from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
+# from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
 
 class Fountain(db.Model):
     __tablename__ = "fountains"
