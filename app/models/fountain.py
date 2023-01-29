@@ -4,7 +4,7 @@ from geoalchemy2.functions import ST_AsGeoJSON, ST_Intersects
 from geoalchemy2.types import Geometry
 # from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
 
-class Fountain(db.Model):
+class Fountain(db.fountain_bp):
     __tablename__ = "fountains"
 
     id = db.Column(db.Integer, primary_key=True)
