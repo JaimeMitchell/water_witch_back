@@ -1,7 +1,7 @@
 from app import db
 from sqlalchemy import *
 from geoalchemy2.functions import ST_AsGeoJSON, ST_Intersects
-# from geoalchemy2 import Geometry, WKTElement,  ST_Intersects
+from geoalchemy2.types import Geometry
 # from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
 
 class Fountain(db.Model):
@@ -13,24 +13,24 @@ class Fountain(db.Model):
     details = db.Column(db.String, nullable=True)
     borough = db.Column(db.String, nullable=True)
 
-    # def to_dict(self):
-    #     return {
-    #         'id': self.id,
-    #         'geometry': self.geometry,
-    #         'name': self.name,
-    #         'details': self.details,
-    #         'borough': self.borough
-    #     }
-
     def to_dict(self):
         return {
             'id': self.id,
-            'geometry': self.geometry.wkt,
+            'geometry': self.geometry,
             'name': self.name,
             'details': self.details,
-            'borough': self.borough,
-
+            'borough': self.borough
         }
+
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,
+    #         'geometry': self.geometry.wkt,
+    #         'name': self.name,
+    #         'details': self.details,
+    #         'borough': self.borough,
+
+    #     }
 
     @classmethod
     def to_object(cls, data_dict):
