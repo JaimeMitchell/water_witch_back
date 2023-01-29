@@ -1,7 +1,8 @@
 from app import db
 from sqlalchemy import *
 from geoalchemy2 import *
-# from geoalchemy2 import Geometry, WKTElement
+# from geoalchemy2 import Geometry, WKTElement,  ST_Intersects
+from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
 
 class Fountain(db.Model):
     __tablename__ = "fountains"
@@ -39,7 +40,6 @@ class Fountain(db.Model):
             details=data_dict["details"],
             borough=data_dict["borough"])
 
-    from sqlalchemy.dialects.postgresql import ST_AsGeoJSON
 
     @classmethod
     def get_clustered_markers(cls, bbox):
@@ -53,11 +53,10 @@ class Fountain(db.Model):
         return cls.query.filter(ST_Intersects(cls.geometry, polygon)).all()
 
     def point_to_geojson(point):
-        location_geojson = db.session.query(ST_AsGeoJSON(
-            Point.location)).filter(Point.id == point.id).scalar()
+        fountain_geojson = db.session.query(ST_AsGeoJSON(Fountain.geometry)).filter(Fountain.id == point.id).scalar()
         return {
             "type": "Feature",
-            "geometry": json.loads(location_geojson),
+            "geometry": json.loads(fountain_geojson),
             "properties": {
                 "name": point.name,
                 "details": point.details,
