@@ -58,6 +58,7 @@ def validate_model(cls, model_id):
 #     return jsonify({'message': 'Success'})
 
 # STANDARD GET ALL FUNCTION
+
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
     fountains = Fountain.query.all()
@@ -78,6 +79,19 @@ def read_all_fountains():
 
 #     return make_response(jsonify(response), 200)
 
+#VERSION 3 GET ALL 
+
+@fountain_bp.route("", strict_slashes=False, methods=["GET"])
+def read_all_fountains():
+    fountains= Fountain.query.all()
+    response = {"type": "FeatureCollection","features": []}
+    geometry= response["geometry"]["coordinates"] #value of this is [lat,lon]
+    print(geometry)
+    for fountain in fountains:
+        feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry":{"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
+        response['features'].append(feature)
+
+    return make_response(jsonify(response), 200)
 
 
 
