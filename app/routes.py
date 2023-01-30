@@ -58,7 +58,6 @@ def validate_model(cls, model_id):
 #     return jsonify({'message': 'Success'})
 
 # STANDARD GET ALL FUNCTION
-STANDARD GET ALL FUNCTION
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
     fountains = Fountain.query.all()
@@ -66,7 +65,8 @@ def read_all_fountains():
 
     return make_response(jsonify(fountain_response), 200)
 
-# #Version 2
+# #VERSION 2 GET ALL 
+
 # @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 # def read_all_fountains():
 #     fountains= Fountain.query.all()
