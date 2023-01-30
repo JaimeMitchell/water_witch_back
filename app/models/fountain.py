@@ -42,29 +42,29 @@ class Fountain(db.Model):
             details=data_dict["details"],
             borough=data_dict["borough"])
 
-    @classmethod
-    def get_clustered_markers(cls, bbox):
-        """
-        Get the markers within the bounding box, optimized for clustering.
-        :param bbox: list of coordinates representing the bounding box
-        :return: list of Fountain objects
-        """
-        polygon = func.ST_GeomFromText(
-            f'POLYGON(({bbox[0]} {bbox[1]}, {bbox[2]} {bbox[1]}, {bbox[2]} {bbox[3]}, {bbox[0]} {bbox[3]}, {bbox[0]} {bbox[1]}))')
-        return cls.query.filter(ST_Intersects(cls.geometry, polygon)).all()
+    # @classmethod
+    # def get_clustered_markers(cls, bbox):
+    #     """
+    #     Get the markers within the bounding box, optimized for clustering.
+    #     :param bbox: list of coordinates representing the bounding box
+    #     :return: list of Fountain objects
+    #     """
+    #     polygon = func.ST_GeomFromText(
+    #         f'POLYGON(({bbox[0]} {bbox[1]}, {bbox[2]} {bbox[1]}, {bbox[2]} {bbox[3]}, {bbox[0]} {bbox[3]}, {bbox[0]} {bbox[1]}))')
+    #     return cls.query.filter(ST_Intersects(cls.geometry, polygon)).all()
 
-    def point_to_geojson(point):
-        location_geojson = db.session.query(ST_AsGeoJSON(
-            Point.location)).filter(Point.id == point.id).scalar()
-        return {
-            "type": "Feature",
-            "geometry": json.loads(location_geojson),
-            "properties": {
-                "name": point.name,
-                "details": point.details,
-                "borough": point.borough
-            }
-        }
+    # def point_to_geojson(point):
+    #     location_geojson = db.session.query(ST_AsGeoJSON(
+    #         Point.location)).filter(Point.id == point.id).scalar()
+    #     return {
+    #         "type": "Feature",
+    #         "geometry": json.loads(location_geojson),
+    #         "properties": {
+    #             "name": point.name,
+    #             "details": point.details,
+    #             "borough": point.borough
+    #         }
+    #     }
 
 # from app import db
 
