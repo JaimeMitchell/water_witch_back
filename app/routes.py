@@ -58,16 +58,25 @@ def validate_model(cls, model_id):
 #     return jsonify({'message': 'Success'})
 
 # STANDARD GET ALL FUNCTION
+STANDARD GET ALL FUNCTION
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
-    fountains = {"type": "FeatureCollection","features": []}
-    
-    for fountain in fountains:
-        feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry": {"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
-        response['features'].append(feature)
-    fountains= Fountain.query.all()
+    fountains = Fountain.query.all()
+    fountain_response = [fountain.to_dict() for fountain in fountains]
 
-    return make_response(jsonify(response), 200)
+    return make_response(jsonify(fountain_response), 200)
+
+# #Version 2
+# @fountain_bp.route("", strict_slashes=False, methods=["GET"])
+# def read_all_fountains():
+#     fountains= Fountain.query.all()
+#     response = {"type": "FeatureCollection","features": []}
+    
+#     for fountain in fountains:
+#         feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry": {"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
+#         response['features'].append(feature)
+
+#     return make_response(jsonify(response), 200)
 
 
 
