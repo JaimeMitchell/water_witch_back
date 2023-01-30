@@ -37,47 +37,54 @@ def validate_model(cls, model_id):
     # If the record is found, the function returns the model, which is a SQLAlchemy object representing the record.
     return model
 
+
 # Route for handling the form submission
-@fountain_bp.route('/add_fountain', methods=['POST'])
-def add_fountain():
-    # Get the data from the form
-    data = request.get_json()
-    
-    # Convert the data to a GeoDataFrame
-    df = GeoDataFrame(data, geometry=[Point(x, y) for x, y in zip(data['longitude'], data['latitude'])])
-    df['geometry'] = df['geometry'].apply(lambda x: WKTElement(x.wkt, srid=4326))
+# @fountain_bp.route('/add_fountain', methods=['POST'])
+# def add_fountain():
+#     # Get the data from the form
+#     data = request.get_json()
 
-    # Add the new fountain to the table
-    df.to_sql('fountains', engine, if_exists='append', index=False, dtype={'geometry': Geometry('POINT', srid= 4326)})
-    
-    # Re-create the spatial index on the geometry column
-    db.session.execute("CREATE INDEX name_of_index ON fountains USING GIST (geometry);")
-    db.session.commit()
+#     # Convert the data to a GeoDataFrame
+#     df = GeoDataFrame(data, geometry=[Point(x, y) for x, y in zip(data['longitude'], data['latitude'])])
+#     df['geometry'] = df['geometry'].apply(lambda x: WKTElement(x.wkt, srid=4326))
 
-    return jsonify({'message': 'Success'})
+#     # Add the new fountain to the table
+#     df.to_sql('fountains', engine, if_exists='append', index=False, dtype={'geometry': Geometry('POINT', srid= 4326)})
 
-#STANDARD GET ALL FUNCTION
+#     # Re-create the spatial index on the geometry column
+#     db.session.execute("CREATE INDEX name_of_index ON fountains USING GIST (geometry);")
+#     db.session.commit()
+
+#     return jsonify({'message': 'Success'})
+
+# STANDARD GET ALL FUNCTION
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
-    fountains = Fountain.query.all()
-    fountain_response = [fountain.to_dict() for fountain in fountains]
+    fountains = {"type": "FeatureCollection","features": []}
+    
+    for fountain in fountains:
+        feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry": {"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
+        response['features'].append(feature)
+    fountains= Fountain.query.all()
 
-    return make_response(jsonify(fountain_response), 200)
+    return make_response(jsonify(response), 200)
 
 
-#STANDARD POST FUNCTION
-@fountain_bp.route("", strict_slashes=False, methods=["POST"])
+
+
+# STANDARD POST FUNCTION
+@ fountain_bp.route("", strict_slashes=False, methods=["POST"])
 def add_fountain():
-    request_body = request.get_json()
-    new_fountain = Fountain.to_object(request_body)
+    request_body= request.get_json()
+    new_fountain= Fountain.to_object(request_body)
     db.session.add(new_fountain)
     db.session.commit()
     return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
 
-#STANDARD DELETE FUNCTION
-@fountain_bp.route("/<id>", strict_slashes=False, methods=["DELETE"])
+# STANDARD DELETE FUNCTION
+@ fountain_bp.route("/<id>", strict_slashes=False, methods=["DELETE"])
 def delete_fountain(id):
-    fountain = validate_model(Fountain, id)
+    fountain= validate_model(Fountain, id)
     db.session.delete(fountain)
     db.session.commit()
     return make_response(jsonify({"details": f"fountain {id} '{fountain.name}' successfully deleted"}), 200)
