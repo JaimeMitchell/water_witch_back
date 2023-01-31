@@ -1,19 +1,52 @@
 from app import db
 from sqlalchemy import *
-from geoalchemy2 import *
+from geoalchemy2 import Geometry
+# from geojson import *
 # from geoalchemy2 import Geometry, WKTElement
 # from geoalchemy2 import Geometry, WKTElement,  ST_Intersects
 # from sqlalchemy.dialects.postgresql import ST_AsGeoJSON, ST_Intersects
-
+# from app import db
 
 class Fountain(db.Model):
     __tablename__ = "fountains"
 
     id = db.Column(db.Integer, primary_key=True)
-    geometry = db.Column(Geometry(geometry_type='POINT', srid=4326))
-    name = db.Column(db.String, nullable=True)
-    details = db.Column(db.String, nullable=True)
-    borough = db.Column(db.String, nullable=True)
+    latitude= db.Column(db.Float, nullable=False)
+    longitude=db.Column(db.Float, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    details = db.Column(db.String, nullable=False)
+    borough = db.Column(db.String, nullable=False)
+
+    
+        
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'latitude':self.latitude,
+            'longitude':self.longitude,
+            'name': self.name,
+            'details': self.details,
+            'borough': self.borough
+        }
+
+    @classmethod
+    def to_object(cls, data_dict):
+        return cls(
+            latitude=data_dict["latitude"],
+            longitude=data_dict["longitude"],
+            name=data_dict["name"],
+            details=data_dict["details"],
+            borough=data_dict["borough"])
+
+
+# class Fountain(db.Model):
+#     __tablename__ = "fountains"
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     geometry = db.Column(Geometry(geometry_type='POINT', srid=4326))
+#     name = db.Column(db.String, nullable=True)
+#     details = db.Column(db.String, nullable=True)
+#     borough = db.Column(db.String, nullable=True)
 
     # def to_dict(self):
     #     return {
@@ -24,23 +57,23 @@ class Fountain(db.Model):
     #         'borough': self.borough
     #     }
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'geometry': self.geometry.wkt,
-            'name': self.name,
-            'details': self.details,
-            'borough': self.borough,
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,
+    #         'geometry': self.geometry.wkt,
+    #         'name': self.name,
+    #         'details': self.details,
+    #         'borough': self.borough,
 
-        }
+    #     }
 
-    @classmethod
-    def to_object(cls, data_dict):
-        return cls(
-            geometry=data_dict["geometry"],
-            name=data_dict["name"],
-            details=data_dict["details"],
-            borough=data_dict["borough"])
+    # @classmethod
+    # def to_object(cls, data_dict):
+    #     return cls(
+    #         geometry=data_dict["geometry"],
+    #         name=data_dict["name"],
+    #         details=data_dict["details"],
+    #         borough=data_dict["borough"])
 
     # @classmethod
     # def get_clustered_markers(cls, bbox):
@@ -72,12 +105,14 @@ class Fountain(db.Model):
 #     __tablename__ = "fountains"
 
 #     id = db.Column(db.Integer, primary_key=True)
-#     latitude= db.Column(db.Float(row[lat]), nullable=False)
-#     longitude=db.Column(db.Float(row[lon]), nullable=False)
-#     name = db.Column(db.String, nullable=True)
-#     details = db.Column(db.String, nullable=True)
-#     borough = db.Column(db.String, nullable=True)
+#     latitude= db.Column(db.Float, nullable=False)
+#     longitude=db.Column(db.Float, nullable=False)
+#     name = db.Column(db.String, nullable=False)
+#     details = db.Column(db.String, nullable=False)
+#     borough = db.Column(db.String, nullable=False)
 
+    
+        
 #     def to_dict(self):
 #         return {
 #             'id': self.id,
