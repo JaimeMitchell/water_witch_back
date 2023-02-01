@@ -38,7 +38,7 @@ def validate_model(cls, model_id):
     return model
 
 
-# STANDARD GET ALL FUNCTION
+# GET ALL (DO I FILTER HERE)
 
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
@@ -48,7 +48,7 @@ def read_all_fountains():
     return make_response(jsonify(fountain_response), 200)
 
 
-# STANDARD GET ONE FUNCTION
+# GET ONE
 
 @fountain_bp.route("/<id>", strict_slashes=False, methods=["GET"])
 def read_one_fountain(id):
@@ -56,7 +56,7 @@ def read_one_fountain(id):
     return {"fountain": fountain.to_dict()}, 200
 
 
-# STANDARD POST FUNCTION
+# POST (FORM TO ADD WATER ENTITY)
 
 @ fountain_bp.route("", strict_slashes=False, methods=["POST"])
 def add_fountain():
@@ -72,7 +72,16 @@ def add_fountain():
     return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
 
 
-# STANDARD UPDATE FUNCTION
+
+# UPDATE ALL
+# @fountain_bp.route("", strict_slashes=False, methods=["PUT"])
+# def update_one_column_all_rows():
+#     request_body = request.get_json()
+#     validate_model()
+
+
+
+# UPDATE ONE
 
 @fountain_bp.route("/<int:id>", strict_slashes=False, methods=["PUT"])
 def update_fountain(id):
@@ -93,13 +102,22 @@ def update_fountain(id):
 
     if "borough" in request_body:
         fountain.borough = request_body["borough"]
+        
+    if "type" in request_body:
+        fountain.borough = request_body["type"]
+    
+    if "phone" in request_body:
+        fountain.borough = request_body["phhone"]
+        
+    if "email" in request_body:
+        fountain.borough = request_body["email"]
 
     db.session.commit()
 
     return make_response(jsonify({"fountain": fountain.to_dict()}), 200)
 
 
-# STANDARD DELETE FUNCTION
+# DELETE ONE
 
 @ fountain_bp.route("/<id>", strict_slashes=False, methods=["DELETE"])
 def delete_fountain(id):
@@ -109,10 +127,14 @@ def delete_fountain(id):
     return make_response(jsonify({"details": f"fountain {id} '{fountain.name}' successfully deleted"}), 200)
 
 
-# DELETE ALL FOUNTAINS (ONLY FOR DEV, GET RID OF THIS IN DEPLOYMENT)
+# DELETE ALL WATER SOURCES (ONLY FOR DEV, GET RID OF THIS IN DEPLOYMENT)
 
 @ fountain_bp.route("/delete_all_fountains", strict_slashes=False, methods=["DELETE"])
 def delete_fountains():
     Fountain.query.delete()
     db.session.commit()
     return make_response(jsonify({"details": f"fountains successfully deleted"}), 200)
+
+# POST FOR REGISTRATION
+
+# POST FOR LOGIN
