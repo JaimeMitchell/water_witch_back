@@ -1,15 +1,17 @@
 from app import create_app, db
+import csv
 from app.models.fountain import Fountain
 
 
 def getFountains():
-    fountains = open("fountain.cvs", "r")
+    fountains = open("fountain.csv", "r")
+    reader= csv.DictReader(fountains)
 
     list_of_fountains_to_add_to_db = []
-    for fountain in fountains:
+    for fountain in reader:
         fountain_to_add = Fountain(
-            latitude=fountain['latitude'],
-            longitude=fountain['longitude'],
+            latitude=float(fountain['latitude']),
+            longitude=float(fountain['longitude']),
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough']
