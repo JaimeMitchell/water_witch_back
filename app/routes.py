@@ -38,25 +38,6 @@ def validate_model(cls, model_id):
     return model
 
 
-# Route for handling the form submission
-# @fountain_bp.route('/add_fountain', methods=['POST'])
-# def add_fountain():
-#     # Get the data from the form
-#     data = request.get_json()
-
-#     # Convert the data to a GeoDataFrame
-#     df = GeoDataFrame(data, geometry=[Point(x, y) for x, y in zip(data['longitude'], data['latitude'])])
-#     df['geometry'] = df['geometry'].apply(lambda x: WKTElement(x.wkt, srid=4326))
-
-#     # Add the new fountain to the table
-#     df.to_sql('fountains', engine, if_exists='append', index=False, dtype={'geometry': Geometry('POINT', srid= 4326)})
-
-#     # Re-create the spatial index on the geometry column
-#     db.session.execute("CREATE INDEX name_of_index ON fountains USING GIST (geometry);")
-#     db.session.commit()
-
-#     return jsonify({'message': 'Success'})
-
 # STANDARD GET ALL FUNCTION
 
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
@@ -66,19 +47,32 @@ def read_all_fountains():
 
     return make_response(jsonify(fountain_response), 200)
 
-# STANDARD POST FUNCTION
 
+# STANDARD GET ONE FUNCTION
+
+@fountain_bp.route("/<id>", strict_slashes=False, methods=["GET"])
+def read_one_fountain(id):
+    fountain = validate_model(Fountain, id)
+    return {"fountain": fountain.to_dict()}, 200
+
+
+# STANDARD POST FUNCTION
 
 @ fountain_bp.route("", strict_slashes=False, methods=["POST"])
 def add_fountain():
     request_body = request.get_json()
-    new_fountain = Fountain.to_object(request_body)
+    try:
+        new_fountain = Fountain.to_object(request_body)
+    except KeyError:
+        abort(make_response({
+            "details": "Invalid data"
+        }, 400))
     db.session.add(new_fountain)
     db.session.commit()
     return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
 
-# STANDARD UPDATE FUNCTION
 
+# STANDARD UPDATE FUNCTION
 
 @fountain_bp.route("/<int:id>", strict_slashes=False, methods=["PUT"])
 def update_fountain(id):
@@ -113,3 +107,12 @@ def delete_fountain(id):
     db.session.delete(fountain)
     db.session.commit()
     return make_response(jsonify({"details": f"fountain {id} '{fountain.name}' successfully deleted"}), 200)
+
+
+# DELETE ALL FOUNTAINS (ONLY FOR DEV, GET RID OF THIS IN DEPLOYMENT)
+
+@ fountain_bp.route("/delete_all_fountains", strict_slashes=False, methods=["DELETE"])
+def delete_fountains():
+    Fountain.query.delete()
+    db.session.commit()
+    return make_response(jsonify({"details": f"fountains successfully deleted"}), 200)

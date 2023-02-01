@@ -85,13 +85,8 @@ COPY public.alembic_version (version_num) FROM stdin;
 \.
 
 
---
--- Data for Name: fountains; Type: TABLE DATA; Schema: public; Owner: postgres
---
 
-COPY public.fountains (id, latitude, longitude, name, details, borough) FROM stdin;
-2	-73.98649181365882	40.60753207315601	Seth Low Playground/ Bealin Square	High Low, Out in Open	B
-\.
+
 
 
 --
