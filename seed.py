@@ -80,15 +80,14 @@ def getFountains():
     list_of_fountains_to_add_to_db = []
     for fountain in fountains:
         fountain_to_add = Fountain(
-            latitude=fountain.latitude,
-            longitude=fountain.longitude,
-            name=fountain.name,
-            details=fountain.details,
-            borough=fountain.borough
+              latitude=fountain['latitude'],
+            longitude=fountain['longitude'],
+            name=fountain['name'],
+            details=fountain['details'],
+            borough=fountain['borough']
         )
         list_of_fountains_to_add_to_db.append(fountain_to_add)
     return list_of_fountains_to_add_to_db
-
 
 def load():
     app = create_app()

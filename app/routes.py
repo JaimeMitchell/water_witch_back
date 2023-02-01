@@ -66,35 +66,9 @@ def read_all_fountains():
 
     return make_response(jsonify(fountain_response), 200)
 
-# #VERSION 2 GET ALL
-
-# @fountain_bp.route("", strict_slashes=False, methods=["GET"])
-# def read_all_fountains():
-#     fountains= Fountain.query.all()
-#     response = {"type": "FeatureCollection","features": []}
-
-#     for fountain in fountains:
-#         feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry": {"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
-#         response['features'].append(feature)
-
-#     return make_response(jsonify(response), 200)
-
-# VERSION 3 GET ALL
-
-# @fountain_bp.route("", strict_slashes=False, methods=["GET"])
-# def read_all_fountains():
-#     fountains= Fountain.query.all()
-#     response = {"type": "FeatureCollection","features": []}
-#     geometry= response["geometry"]["coordinates"] #value of this is [lat,lon]
-#     print(geometry)
-#     for fountain in fountains:
-#         feature={"type": "Feature", "properties": {"name": fountain.name, "details": fountain.details,"borough":fountain.borough }, "geometry":{"type": "Point", "coordinates": [fountain.latitude, fountain.longitude]}}
-#         response['features'].append(feature)
-
-#     return make_response(jsonify(response), 200)
-
-
 # STANDARD POST FUNCTION
+
+
 @ fountain_bp.route("", strict_slashes=False, methods=["POST"])
 def add_fountain():
     request_body = request.get_json()
@@ -103,8 +77,35 @@ def add_fountain():
     db.session.commit()
     return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
 
-# STANDARD DELETE FUNCTION
+# STANDARD UPDATE FUNCTION
 
+
+@fountain_bp.route("/<int:id>", strict_slashes=False, methods=["PUT"])
+def update_fountain(id):
+    request_body = request.get_json()
+    fountain = validate_model(Fountain, id)
+
+    if "latitude" in request_body:
+        fountain.latitude = request_body["latitude"]
+
+    if "longitude" in request_body:
+        fountain.longitude = request_body["longitude"]
+
+    if "name" in request_body:
+        fountain.name = request_body["name"]
+
+    if "details" in request_body:
+        fountain.details = request_body["details"]
+
+    if "borough" in request_body:
+        fountain.borough = request_body["borough"]
+
+    db.session.commit()
+
+    return make_response(jsonify({"fountain": fountain.to_dict()}), 200)
+
+
+# STANDARD DELETE FUNCTION
 
 @ fountain_bp.route("/<id>", strict_slashes=False, methods=["DELETE"])
 def delete_fountain(id):
