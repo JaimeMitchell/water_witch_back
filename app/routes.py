@@ -6,9 +6,7 @@ from sqlalchemy.sql.expression import select, func
 # import requests, if i want to incorporate an 3rd party api and/or bot (see slack bot in tasklist-api repo)
 # import os, if i want to incorporate an 3rd party api and/or bot (see slack bot in tasklist-api repo)
 import os
-import requests
-from geoalchemy2 import Geometry, WKTElement
-from geopandas import GeoDataFrame
+
 
 
 load_dotenv()
