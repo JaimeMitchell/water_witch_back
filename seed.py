@@ -14,16 +14,13 @@ def getFountains():
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough'],
-            type=fountain['type'],
-            phone=fountain['phone'],
-            email=fountain['type']
-            
+            type=fountain['type']
+
         )
         if fountain_to_add.type == '':
             fountain_to_add.type = 'public drinking fountains'
         list_of_fountains_to_add_to_db.append(fountain_to_add)
     return list_of_fountains_to_add_to_db
-
 
 
 def load():
@@ -42,4 +39,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
