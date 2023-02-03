@@ -10,6 +10,7 @@ import requests
 from geoalchemy2 import Geometry, WKTElement
 from geopandas import GeoDataFrame
 
+
 load_dotenv()
 
 # INSTANIATE BLUEPRINT FOR ROUTES
@@ -38,7 +39,7 @@ def validate_model(cls, model_id):
     return model
 
 
-# GET ALL (DO I FILTER HERE)
+# GET ALL, FILTER LOGIC HERE
 
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def read_all_fountains():
@@ -73,7 +74,7 @@ def add_fountain():
 
 
 
-# UPDATE ALL
+# UPDATE ALL, ROWS of ONE COLUMN
 # @fountain_bp.route("", strict_slashes=False, methods=["PUT"])
 # def update_one_column_all_rows():
 #     request_body = request.get_json()

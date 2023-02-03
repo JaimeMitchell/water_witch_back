@@ -6,7 +6,6 @@ from app.models.fountain import Fountain
 def getFountains():
     fountains = open("fountain.csv", "r")
     reader = csv.DictReader(fountains)
-
     list_of_fountains_to_add_to_db = []
     for fountain in reader:
         fountain_to_add = Fountain(
@@ -15,12 +14,13 @@ def getFountains():
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough'],
-            type='public_drinking_fountain',
-            # phone=fountain['phone'],
-            # email=fountain['email']
+            type=fountain['type']
         )
+        if fountain_to_add.type == '':
+            fountain_to_add.type = 'fountain'
         list_of_fountains_to_add_to_db.append(fountain_to_add)
     return list_of_fountains_to_add_to_db
+
 
 
 def load():
@@ -40,27 +40,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-# fountains = [
-#     {
-#         "type": "FeatureCollection",
-#         "features": [
-#             {"type": "Feature",
-#             "properties": { "name": "Pink Playground",
-#             "details": "In Playground",
-#             "borough": "B",
-#             "latitude": 40.666701390972364,
-#             "longitude": -73.862594500714295 }
-#             }
-#         ]
-#     }
-# ]
-
-# IF I NEED TO GO BACK TO GEOJSON FORMAT, HERE'S EXAMPLE OF HOW I MIGHT GRAB NESTED VALUE
-# def getFountains():
-#     list_of_fountains_to_add_to_db = []
-#     for fountain in fountains:
-#         fountain_to_add = Fountain(
-#             latitude=fountain.features[0].property.latitude,
-#             longitude=fountain.features[0].property.longitude,
-# ...
