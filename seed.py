@@ -17,7 +17,7 @@ def getFountains():
             type=fountain['type']
         )
         if fountain_to_add.type == '':
-            fountain_to_add.type = 'fountain'
+            fountain_to_add.type = 'public drinking fountains'
         list_of_fountains_to_add_to_db.append(fountain_to_add)
     return list_of_fountains_to_add_to_db
 
