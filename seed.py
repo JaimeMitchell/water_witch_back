@@ -14,7 +14,10 @@ def getFountains():
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough'],
-            type=fountain['type']
+            type=fountain['type'],
+            phone=fountain['phone'],
+            email=fountain['type']
+            
         )
         if fountain_to_add.type == '':
             fountain_to_add.type = 'public drinking fountains'
