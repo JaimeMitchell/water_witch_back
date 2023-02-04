@@ -3,10 +3,9 @@ from app.models.fountain import Fountain
 from flask import Blueprint, jsonify, abort, make_response, request
 from dotenv import load_dotenv
 from sqlalchemy.sql.expression import select, func
-# import requests, if i want to incorporate an 3rd party api and/or bot (see slack bot in tasklist-api repo)
-# import os, if i want to incorporate an 3rd party api and/or bot (see slack bot in tasklist-api repo)
+# import requests, if i want to incorporate an 3rd party api and/or bot (see slack bot in fountainlist-api repo)
+# import os, if i want to incorporate an 3rd party api and/or bot (see slack bot in fountainlist-api repo)
 import os
-
 
 
 load_dotenv()
@@ -39,12 +38,47 @@ def validate_model(cls, model_id):
 
 # GET ALL, FILTER LOGIC HERE
 
-@fountain_bp.route("", strict_slashes=False, methods=["GET"])
-def read_all_fountains():
-    fountains = Fountain.query.all()
+# @fountain_bp.route("", strict_slashes=False, methods=["GET"])
+# def read_all_fountains():
+#     fountains = Fountain.query.all()
+#     fountain_response = [fountain.to_dict() for fountain in fountains]
+
+#     return make_response(jsonify(fountain_response), 200)
+
+# FILTER BY FOUNTAIN, PRIVATE,
+
+
+@fountain_bp.route("/", strict_slashes=False, methods=["GET"])
+def get_all_fountain():
+    type_query = request.args.get("type")
+    borough_query = request.args.get("borough")
+    name_query = request.args.get("name")
+    # 'sort' is the query param /fountain?sort=asc and order_by is storing the value of that key
+    order_by = request.args.get("sort")
+    # SELECT ... table_name but without * or any WHERE statements what is the data-type/data-structure, how is it storing?
+    fountain_query = Fountain.query
+
+   # this is like WHERE
+    if type_query:
+        fountain_query = fountain_query.filter_by(type=type_query)
+
+    if borough_query:
+        fountain_query = fountain_query.filter_by(borough=borough_query)
+
+    if name_query:
+        fountain_query = fountain_query.filter_by(name=name_query)
+# GET/Localhost:5000/fountain?sort=asc
+    if order_by == "asc":  # Because order_by is the value of the key "sort" it needs to equal "this string"
+        fountain_query = fountain_query.order_by(Fountain.title.asc())
+
+    if order_by == "desc":
+        fountain_query = fountain_query.order_by(Fountain.title.desc())
+
+    fountains = fountain_query.all()  # like SELECT * from fountain if none of these are true, BUT fountain_query is holding the (possibly list datastructure?) value of any filters above that are true and asking for all of them, NOT all things in the Table. fountain_query.all() is saying get everything in my table but the fountain_query is saying match these specific parameters and the parameters are the things I've built up above from the if statement filters.
+
     fountain_response = [fountain.to_dict() for fountain in fountains]
 
-    return make_response(jsonify(fountain_response), 200)
+    return jsonify(fountain_response)
 
 
 # GET ONE
@@ -71,13 +105,11 @@ def add_fountain():
     return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
 
 
-
 # UPDATE ALL, ROWS of ONE COLUMN
 # @fountain_bp.route("", strict_slashes=False, methods=["PUT"])
 # def update_one_column_all_rows():
 #     request_body = request.get_json()
 #     validate_model()
-
 
 
 # UPDATE ONE
@@ -101,13 +133,13 @@ def update_fountain(id):
 
     if "borough" in request_body:
         fountain.borough = request_body["borough"]
-        
+
     if "type" in request_body:
         fountain.borough = request_body["type"]
-    
+
     if "phone" in request_body:
         fountain.borough = request_body["phhone"]
-        
+
     if "email" in request_body:
         fountain.borough = request_body["email"]
 
