@@ -36,7 +36,7 @@ def validate_model(cls, model_id):
     return model
 
 
-# GET ALL, FILTER LOGIC HERE
+# GET ALL
 
 # @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 # def read_all_fountains():
@@ -45,27 +45,34 @@ def validate_model(cls, model_id):
 
 #     return make_response(jsonify(fountain_response), 200)
 
-# FILTER BY DRINKING FOUNTAIN, PRIVATE HOSE BIB
+# FILTER BY PARK DRINKING FOUNTAIN, PUBLIC FILL STATION PRIVATE HOSE BIB, PUBLIC HOSE BIB, PRIVATE FILL STATION, NON-PROFIT HOSE BIB (They get water bill exemptions from the city). BOROUGHS ARE M,X,B,Q,S
 
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def get_all_fountain():
     type_query = request.args.get("type")
     borough_query = request.args.get("borough")
     fountain_query = Fountain.query
-#fountain_query is saying match these specific parameters and the parameters are the things I've built up above and from the if statement filters below.
-
-   # this is like WHERE
     if type_query:
         fountain_query = fountain_query.filter_by(type=type_query)
 
     if borough_query:
         fountain_query = fountain_query.filter_by(borough=borough_query)
-   
-    fountains = fountain_query.all()  # like SELECT * from fountain if none of these are true, BUT fountain_query is holding the (possibly list datastructure?) value of any filters above that are true and asking for all of them, NOT all things in the Table. fountain_query.all() is saying get everything in my table but the fountain_query is saying match these specific parameters and the parameters are the things I've built up above from the if statement filters.
+
+    fountains = fountain_query.all()
 
     fountain_response = [fountain.to_dict() for fountain in fountains]
 
     return jsonify(fountain_response)
+
+# version 2 if this doesn't work:
+# @fountain_bp.route('/fountains')
+# def get_fountains():
+#     type = request.args.get('type')
+#     if type:
+#         fountains = Fountain.query.filter(Fountain.type == type).all()
+#     else:
+#         fountains = Fountain.query.all()
+#     return jsonify([fountain.to_dict() for fountain in fountains])
 
 
 # GET ONE

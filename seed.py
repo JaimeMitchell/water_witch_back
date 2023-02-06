@@ -18,8 +18,18 @@ def getFountains():
 
         )
         if fountain_to_add.type == '':
-            fountain_to_add.type = 'public drinking fountains'
+            fountain_to_add.type = 'PUBLIC DRINKING FOUNTAIN'
         list_of_fountains_to_add_to_db.append(fountain_to_add)
+        if fountain_to_add.borough == 'M':
+            fountain_to_add.borough = 'Manhattan'
+        if fountain_to_add.borough == 'B':
+            fountain_to_add.borough = 'Brooklyn'
+        if fountain_to_add.borough == 'X':
+            fountain_to_add.borough = 'Bronx'
+        if fountain_to_add.borough == 'Q':
+            fountain_to_add.borough = 'Queens'
+        if fountain_to_add.borough == 'R':
+            fountain_to_add.borough = 'Staten Island'
     return list_of_fountains_to_add_to_db
 
 
