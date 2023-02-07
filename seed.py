@@ -11,6 +11,7 @@ def getFountains():
         fountain_to_add = Fountain(
             latitude=float(fountain['latitude']),
             longitude=float(fountain['longitude']),
+            address=fountains['address']
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough'],
@@ -18,7 +19,7 @@ def getFountains():
 
         )
         if fountain_to_add.type == '':
-            fountain_to_add.type = 'PUBLIC DRINKING FOUNTAIN'
+            fountain_to_add.type = 'Park Drinking Fountain'
         list_of_fountains_to_add_to_db.append(fountain_to_add)
         if fountain_to_add.borough == 'M':
             fountain_to_add.borough = 'Manhattan'
