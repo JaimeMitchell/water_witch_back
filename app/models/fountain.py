@@ -8,6 +8,7 @@ class Fountain(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
+    address = db.Column(db.String, nullable=True)
     name = db.Column(db.String, nullable=False)
     details = db.Column(db.String, nullable=False)
     borough = db.Column(db.String, nullable=False)
@@ -20,6 +21,7 @@ class Fountain(db.Model):
             'id': self.id,
             'latitude': self.latitude,
             'longitude': self.longitude,
+            'address': self.address,
             'name': self.name,
             'details': self.details,
             'borough': self.borough,
@@ -33,6 +35,7 @@ class Fountain(db.Model):
         return cls(
             latitude=data_dict["latitude"],
             longitude=data_dict["longitude"],
+            address=data_dict["address"],
             name=data_dict["name"],
             details=data_dict["details"],
             borough=data_dict["borough"],

@@ -51,20 +51,22 @@ def validate_model(cls, model_id):
 def get_all_fountain():
     type_query = request.args.get("type")
     borough_query = request.args.get("borough")
+    address_query = request.args.get("address")
     fountain_query = Fountain.query
     if type_query:
         fountain_query = fountain_query.filter_by(type=type_query)
 
     if borough_query:
         fountain_query = fountain_query.filter_by(borough=borough_query)
-
+    if address_query:
+        fountains_query = fountain_query.filter_by(address=address_query)
     fountains = fountain_query.all()
 
     fountain_response = [fountain.to_dict() for fountain in fountains]
 
     return jsonify(fountain_response)
 
-# version 2 if this doesn't work:
+# version 2 if this get_all_fountains doesn't work:
 # @fountain_bp.route('/fountains')
 # def get_fountains():
 #     type = request.args.get('type')
@@ -111,6 +113,9 @@ def update_fountain(id):
 
     if "longitude" in request_body:
         fountain.longitude = request_body["longitude"]
+        
+    if "address" in request_body:
+        fountain.address = request_body["address"]
 
     if "name" in request_body:
         fountain.name = request_body["name"]
