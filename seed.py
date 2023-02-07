@@ -11,7 +11,7 @@ def getFountains():
         fountain_to_add = Fountain(
             latitude=float(fountain['latitude']),
             longitude=float(fountain['longitude']),
-            address=fountains['address']
+            address=fountain['address'],
             name=fountain['name'],
             details=fountain['details'],
             borough=fountain['borough'],
