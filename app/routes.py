@@ -36,7 +36,7 @@ def validate_model(cls, model_id):
     return model
 
 
-# GET ALL
+# BASIC NO FRILLS GET ALL
 
 # @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 # def read_all_fountains():
@@ -45,7 +45,7 @@ def validate_model(cls, model_id):
 
 #     return make_response(jsonify(fountain_response), 200)
 
-# FILTER BY PARK DRINKING FOUNTAIN, PUBLIC FILL STATION PRIVATE HOSE BIB, PUBLIC HOSE BIB, PRIVATE FILL STATION, NON-PROFIT HOSE BIB (They get water bill exemptions from the city). BOROUGHS ARE M,X,B,Q,S
+# FILTER BY Type, Borough, Address (ex:  Type: Private Hose Bibb  Borough: Manhattan  Address 200 11th st, New York, NY, 10003)
 
 @fountain_bp.route("", strict_slashes=False, methods=["GET"])
 def get_all_fountain():
@@ -66,18 +66,6 @@ def get_all_fountain():
 
     return jsonify(fountain_response)
 
-# version 2 if this get_all_fountains doesn't work:
-# @fountain_bp.route('/fountains')
-# def get_fountains():
-#     type = request.args.get('type')
-#     if type:
-#         fountains = Fountain.query.filter(Fountain.type == type).all()
-#     else:
-#         fountains = Fountain.query.all()
-#     return jsonify([fountain.to_dict() for fountain in fountains])
-
-
-# GET ONE
 
 @fountain_bp.route("/<id>", strict_slashes=False, methods=["GET"])
 def read_one_fountain(id):
@@ -98,7 +86,7 @@ def add_fountain():
         }, 400))
     db.session.add(new_fountain)
     db.session.commit()
-    return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
+    return make_response(jsonify((new_fountain.to_dict())), 201)
 
 
 # UPDATE ONE
@@ -113,7 +101,7 @@ def update_fountain(id):
 
     if "longitude" in request_body:
         fountain.longitude = request_body["longitude"]
-        
+
     if "address" in request_body:
         fountain.address = request_body["address"]
 

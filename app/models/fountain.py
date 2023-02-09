@@ -12,8 +12,8 @@ class Fountain(db.Model):
     name = db.Column(db.String, nullable=False)
     details = db.Column(db.String, nullable=False)
     borough = db.Column(db.String, nullable=False)
-    type = db.Column(db.String, nullable=True)
-    phone = db.Column(db.Integer, nullable=True)
+    type = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String, nullable=True)
     email = db.Column(db.String, nullable=True)
 
     def to_dict(self):
