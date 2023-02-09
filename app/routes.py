@@ -73,7 +73,7 @@ def read_one_fountain(id):
     return {"fountain": fountain.to_dict()}, 200
 
 
-#  POST (FORM TO ADD WATER ENTITY)
+# POST (FORM TO ADD WATER ENTITY)
 
 @ fountain_bp.route("", strict_slashes=False, methods=["POST"])
 def add_fountain():
@@ -86,7 +86,7 @@ def add_fountain():
         }, 400))
     db.session.add(new_fountain)
     db.session.commit()
-    return make_response(jsonify({"fountain": new_fountain.to_dict()}), 201)
+    return make_response(jsonify((new_fountain.to_dict())), 201)
 
 
 # UPDATE ONE
