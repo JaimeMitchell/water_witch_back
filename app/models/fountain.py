@@ -8,7 +8,7 @@ class Fountain(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
-    address = db.Column(db.String, nullable=False)
+    address = db.Column(db.String, nullable=True)
     name = db.Column(db.String, nullable=False)
     details = db.Column(db.String, nullable=False)
     borough = db.Column(db.String, nullable=False)
