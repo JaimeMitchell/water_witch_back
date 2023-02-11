@@ -58,9 +58,11 @@ def get_all_fountain():
 
     if borough_query:
         fountain_query = fountain_query.filter_by(borough=borough_query)
+
     if address_query:
         fountain_query = fountain_query.filter_by(address=address_query)
     # fountains = fountain_query.all()
+    # SORT
     fountains = fountain_query.order_by(Fountain.id).all()
     fountain_response = [fountain.to_dict() for fountain in fountains]
 
