@@ -142,11 +142,6 @@ def delete_fountain(id):
 
 # DELETE ALL WATER SOURCES (ONLY FOR DEV, GET RID OF THIS IN DEPLOYMENT)
 
-@ fountain_bp.route("/delete_all_fountains", strict_slashes=False, methods=["DELETE"])
-def delete_fountains():
-    Fountain.query.delete()
-    db.session.commit()
-    return make_response(jsonify({"details": f"fountains successfully deleted"}), 200)
 
 # POST FOR REGISTRATION
 
