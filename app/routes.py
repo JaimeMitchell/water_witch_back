@@ -93,7 +93,7 @@ def add_fountain():
 
 # UPDATE ONE
 
-@fountain_bp.route("/<int:id>", strict_slashes=False, methods=["PUT"])
+@fountain_bp.route("/<id>", strict_slashes=False, methods=["PUT"])
 def update_fountain(id):
     request_body = request.get_json()
     fountain = validate_model(Fountain, id)
