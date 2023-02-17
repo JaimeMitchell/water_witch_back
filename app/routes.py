@@ -93,7 +93,7 @@ def add_fountain():
 
 # UPDATE ONE
 
-@fountain_bp.route("/<id>", strict_slashes=False, methods=["PUT"])
+@fountain_bp.route("/<int:id>", strict_slashes=False, methods=["PUT"])
 def update_fountain(id):
     request_body = request.get_json()
     fountain = validate_model(Fountain, id)
@@ -117,13 +117,13 @@ def update_fountain(id):
         fountain.borough = request_body["borough"]
 
     if "type" in request_body:
-        fountain.borough = request_body["type"]
+        fountain.type = request_body["type"]
 
     if "phone" in request_body:
-        fountain.borough = request_body["phhone"]
+        fountain.phone = request_body["phhone"]
 
     if "email" in request_body:
-        fountain.borough = request_body["email"]
+        fountain.email = request_body["email"]
 
     db.session.commit()
 
@@ -141,4 +141,3 @@ def delete_fountain(id):
 
 
 # DELETE ALL WATER SOURCES (ONLY FOR DEV, GET RID OF THIS IN DEPLOYMENT)
-
